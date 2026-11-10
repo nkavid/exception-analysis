@@ -1,0 +1,50 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("//rule:copts.bzl", "EXA_COPTS")
+
+cc_library(
+    name = "analysis",
+    copts = EXA_COPTS,
+    srcs = [
+        "analysis.cpp",
+        "border_crossing.cpp",
+    ],
+    hdrs = [
+        "analysis.hpp",
+        "border_crossing.hpp",
+    ],
+    deps = [
+        "//exception_flow/summary",
+        "@llvm-project//clang:scalable_static_analysis_analyses",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//llvm:Support",
+    ],
+)
+
+cc_library(
+    name = "graph_json",
+    copts = EXA_COPTS,
+    srcs = ["graph_json.cpp"],
+    hdrs = ["graph_json.hpp"],
+    deps = [
+        ":analysis",
+        "//exception_flow/summary",
+        "@llvm-project//llvm:Support",
+    ],
+)
+
+cc_binary(
+    name = "exa-analyze",
+    copts = EXA_COPTS,
+    srcs = ["main.cpp"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":analysis",
+        ":graph_json",
+        "//exception_flow/summary",
+        "//exception_flow/summary:json_format",
+        "@llvm-project//clang:scalable_static_analysis_analyses",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//clang:scalable_static_analysis_source_transformation",
+        "@llvm-project//llvm:Support",
+    ],
+)

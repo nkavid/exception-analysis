@@ -1,0 +1,93 @@
+{
+  "type": "TUSummary",
+  "target_triple": "x86_64-unknown-linux-gnu",
+  "tu_namespace": {
+    "kind": "CompilationUnit",
+    "name": "throwing.cpp"
+  },
+  "id_table": [
+    {
+      "id": 0,
+      "name": {
+        "usr": "c:@F@throwing#",
+        "suffix": ""
+      }
+    }
+  ],
+  "linkage_table": [
+    {
+      "id": 0,
+      "linkage": {
+        "type": "External"
+      }
+    }
+  ],
+  "data": [
+    {
+      "summary_name": "ExaExceptionFlow",
+      "summary_data": [
+        {
+          "entity_id": 0,
+          "entity_summary": {
+            "FunctionDefinition": {
+              "EntityDefinition": {
+                "name": "throwing",
+                "sourceLocation": {
+                  "file": "throwing.cpp",
+                  "line": 3,
+                  "column": 1
+                },
+                "inSystemHeader": false
+              },
+              "compilationUnit": "throwing.cpp",
+              "border": {
+                "exceptionSpecification": "potentially_throwing",
+                "nounwindCause": null,
+                "languageLinkage": "cxx"
+              },
+              "isEntryPoint": false,
+              "catches": [],
+              "throws": [
+                {
+                  "thrownType": {
+                    "name": "Error",
+                    "isPointer": false,
+                    "record": null
+                  },
+                  "handlers": [],
+                  "sourceLocation": {
+                    "file": "throwing.cpp",
+                    "line": 5,
+                    "column": 3
+                  }
+                }
+              ],
+              "rethrows": [],
+              "calls": [
+                {
+                  "callee": {
+                    "UnmappedCallee": {
+                      "name": "log",
+                      "border": {
+                        "exceptionSpecification": "non_throwing",
+                        "nounwindCause": "exception_specification",
+                        "languageLinkage": "cxx"
+                      }
+                    }
+                  },
+                  "handlers": [],
+                  "enclosingHandler": null,
+                  "sourceLocation": {
+                    "file": "throwing.cpp",
+                    "line": 4,
+                    "column": 3
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

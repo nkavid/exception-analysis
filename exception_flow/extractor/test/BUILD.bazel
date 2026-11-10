@@ -1,0 +1,63 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("//rule:copts.bzl", "EXA_COPTS", "EXA_TEST_COPTS")
+
+cc_library(
+    name = "translation_unit",
+    testonly = True,
+    copts = EXA_COPTS,
+    srcs = ["translation_unit.cpp"],
+    hdrs = ["translation_unit.hpp"],
+    deps = [
+        "//exception_flow/extractor",
+        "//exception_flow/summary",
+        "@llvm-project//clang:ast",
+        "@llvm-project//clang:frontend",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//clang:tooling",
+        "@llvm-project//llvm:Support",
+        "@llvm-project//llvm:TargetParser",
+    ],
+)
+
+cc_library(
+    name = "summary_json",
+    testonly = True,
+    copts = EXA_COPTS,
+    srcs = ["summary_json.cpp"],
+    hdrs = ["summary_json.hpp"],
+    deps = [
+        ":translation_unit",
+        "//exception_flow/summary",
+        "//exception_flow/summary:json_format",
+        "@llvm-project//llvm:Support",
+        "@llvm-project//third-party/unittest:gtest",
+    ],
+)
+
+cc_test(
+    name = "extractor_test",
+    size = "small",
+    copts = EXA_TEST_COPTS,
+    srcs = ["extractor_test.cpp"],
+    deps = [
+        ":translation_unit",
+        "//exception_flow/summary",
+        "//exception_flow/summary/test:stream_operator",
+        "@llvm-project//llvm:Support",
+        "@llvm-project//third-party/unittest:gtest",
+        "@llvm-project//third-party/unittest:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "extractor_json_test",
+    size = "small",
+    copts = EXA_TEST_COPTS,
+    srcs = ["extractor_json_test.cpp"],
+    deps = [
+        ":summary_json",
+        ":translation_unit",
+        "@llvm-project//third-party/unittest:gtest",
+        "@llvm-project//third-party/unittest:gtest_main",
+    ],
+)

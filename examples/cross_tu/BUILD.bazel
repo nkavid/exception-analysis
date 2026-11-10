@@ -1,0 +1,58 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("//aspect:defs.bzl", "exception_graph_test")
+load("//visualizer:defs.bzl", "exception_graph_dot")
+
+cc_library(
+    name = "errors",
+    tags = ["exa_under_analysis"],
+    hdrs = ["errors.hpp"],
+)
+
+cc_library(
+    name = "parser",
+    tags = ["exa_under_analysis"],
+    srcs = ["parser.cpp"],
+    hdrs = ["parser.hpp"],
+    deps = [":errors"],
+)
+
+cc_library(
+    name = "config",
+    tags = ["exa_under_analysis"],
+    srcs = ["config.cpp"],
+    hdrs = ["config.hpp"],
+    deps = [
+        ":errors",
+        ":parser",
+    ],
+)
+
+cc_library(
+    name = "rethrow",
+    tags = ["exa_under_analysis"],
+    srcs = ["rethrow.cpp"],
+    hdrs = ["rethrow.hpp"],
+)
+
+cc_binary(
+    name = "app",
+    tags = ["exa_under_analysis"],
+    srcs = ["main.cpp"],
+    deps = [
+        ":config",
+        ":errors",
+        ":parser",
+        ":rethrow",
+    ],
+)
+
+exception_graph_dot(
+    name = "app_exceptions_dot",
+    binary = ":app",
+)
+
+exception_graph_test(
+    name = "app_exceptions_test",
+    binary = ":app",
+    check = "expect_graph.sh",
+)

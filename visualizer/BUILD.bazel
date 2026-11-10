@@ -1,0 +1,8 @@
+load("@rules_python//python:py_binary.bzl", "py_binary")
+
+py_binary(
+    name = "exa-dot",
+    srcs = ["exa_dot.py"],
+    main = "exa_dot.py",
+    visibility = ["//visibility:public"],
+)

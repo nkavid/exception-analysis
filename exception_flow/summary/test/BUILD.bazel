@@ -1,0 +1,78 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("//rule:copts.bzl", "EXA_TEST_COPTS")
+
+cc_library(
+    name = "stream_operator",
+    testonly = True,
+    hdrs = ["stream_operator.hpp"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//exception_flow/summary",
+        "@llvm-project//clang:scalable_static_analysis_analyses",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//llvm:Support",
+    ],
+)
+
+cc_library(
+    name = "test_data",
+    testonly = True,
+    copts = EXA_TEST_COPTS,
+    srcs = ["test_data.cpp"],
+    hdrs = ["test_data.hpp"],
+    deps = [
+        "//exception_flow/summary",
+        "@llvm-project//llvm:Support",
+    ],
+)
+
+cc_test(
+    name = "json_format_serialize_test",
+    size = "small",
+    copts = EXA_TEST_COPTS,
+    srcs = ["json_format_serialize_test.cpp"],
+    data = glob(["test_data/*.json"]),
+    deps = [
+        ":test_data",
+        "//exception_flow/summary",
+        "//exception_flow/summary:json_format",
+        "@llvm-project//llvm:Support",
+        "@llvm-project//third-party/unittest:gtest",
+        "@llvm-project//third-party/unittest:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "json_format_deserialize_test",
+    size = "small",
+    copts = EXA_TEST_COPTS,
+    srcs = ["json_format_deserialize_test.cpp"],
+    data = glob(["test_data/*.json"]),
+    deps = [
+        ":stream_operator",
+        ":test_data",
+        "//exception_flow/summary",
+        "//exception_flow/summary:json_format",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//llvm:Support",
+        "@llvm-project//third-party/unittest:gtest",
+        "@llvm-project//third-party/unittest:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "json_format_tu_summary_test",
+    size = "small",
+    copts = EXA_TEST_COPTS,
+    srcs = ["json_format_tu_summary_test.cpp"],
+    data = glob(["test_data/*.json"]),
+    deps = [
+        ":test_data",
+        "//exception_flow/summary",
+        "//exception_flow/summary:json_format",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//llvm:Support",
+        "@llvm-project//third-party/unittest:gtest",
+        "@llvm-project//third-party/unittest:gtest_main",
+    ],
+)

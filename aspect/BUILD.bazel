@@ -1,0 +1,22 @@
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load(":defs.bzl", "exec_tool")
+
+sh_binary(
+    name = "link_coverage",
+    srcs = ["link_coverage.sh"],
+)
+
+exec_tool(
+    name = "exa-extract",
+    tool = "//exception_flow/extractor:exa-extract",
+)
+
+exec_tool(
+    name = "clang-ssaf-linker",
+    tool = "@llvm-project//clang:clang-ssaf-linker",
+)
+
+exec_tool(
+    name = "exa-analyze",
+    tool = "//exception_flow/analyzer:exa-analyze",
+)

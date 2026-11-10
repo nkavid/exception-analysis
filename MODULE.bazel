@@ -1,0 +1,30 @@
+module(
+    name = "exception_analysis",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "rules_cc", version = "0.2.25")
+bazel_dep(name = "rules_python", version = "1.8.0")
+bazel_dep(name = "rules_shell", version = "0.8.0")
+bazel_dep(name = "llvm", version = "0.8.26")
+
+single_version_override(
+    module_name = "llvm",
+    patch_strip = 1,
+    patches = [
+        "//third_party/hermetic_llvm:0001-let-root-module-choose-llvm-targets.patch",
+        "//third_party/hermetic_llvm:0002-enable-external-include-paths-by-default.patch",
+    ],
+    version = "0.8.26",
+)
+
+PINNED_LLVM_RELEASE = "23.1.2"
+
+HOST_BACKEND_ONLY = ["X86"]
+
+llvm = use_extension("@llvm//extensions:llvm.bzl", "llvm")
+llvm.version(llvm_version = PINNED_LLVM_RELEASE)
+llvm.configure(targets = HOST_BACKEND_ONLY)
+use_repo(llvm, "llvm-project")
+
+register_toolchains("@llvm//toolchain:all")

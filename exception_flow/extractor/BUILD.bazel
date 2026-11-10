@@ -1,0 +1,38 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("//rule:copts.bzl", "EXA_COPTS")
+
+cc_library(
+    name = "extractor",
+    copts = EXA_COPTS,
+    srcs = ["extractor.cpp"],
+    hdrs = ["extractor.hpp"],
+    visibility = ["//exception_flow/extractor:__subpackages__"],
+    deps = [
+        "//exception_flow/summary",
+        "@llvm-project//clang:ast",
+        "@llvm-project//clang:basic",
+        "@llvm-project//clang:frontend",
+        "@llvm-project//clang:scalable_static_analysis_analyses",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//llvm:Support",
+    ],
+)
+
+cc_binary(
+    name = "exa-extract",
+    copts = EXA_COPTS,
+    srcs = ["main.cpp"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":extractor",
+        "//exception_flow/summary",
+        "//exception_flow/summary:json_format",
+        "@llvm-project//clang:frontend",
+        "@llvm-project//clang:scalable_static_analysis_analyses",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//clang:scalable_static_analysis_frontend",
+        "@llvm-project//clang:scalable_static_analysis_source_transformation",
+        "@llvm-project//clang:tooling",
+        "@llvm-project//llvm:Support",
+    ],
+)

@@ -1,0 +1,10 @@
+--- a/toolchain/cc_toolchain.bzl	2026-11-10 15:57:14.403709300 +0100
++++ b/toolchain/cc_toolchain.bzl	2026-11-10 15:57:14.411636661 +0100
+@@ -181,6 +181,7 @@
+             "@llvm//toolchain/features:module_map_home_cwd",
+             "@llvm//toolchain/features:generate_submodules",
+             "@llvm//toolchain/features:module_map_without_extern_module",
++            "@llvm//toolchain/features:external_include_paths",
+             # These are "enabled" but they only _actually_ get enabled when the underlying compilation mode is set.
+             # This lets us properly order them before user_compile_flags and user_link_flags below.
+             "@llvm//toolchain/features:opt",

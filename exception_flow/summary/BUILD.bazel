@@ -1,0 +1,32 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("//rule:copts.bzl", "EXA_COPTS")
+
+cc_library(
+    name = "summary",
+    copts = EXA_COPTS,
+    srcs = ["summary.cpp"],
+    hdrs = [
+        "enum_string.hpp",
+        "summary.hpp",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@llvm-project//clang:scalable_static_analysis_analyses",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//llvm:Support",
+    ],
+)
+
+cc_library(
+    name = "json_format",
+    copts = EXA_COPTS,
+    srcs = ["json_format.cpp"],
+    hdrs = ["json_format.hpp"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":summary",
+        "@llvm-project//clang:scalable_static_analysis_analyses",
+        "@llvm-project//clang:scalable_static_analysis_core",
+        "@llvm-project//llvm:Support",
+    ],
+)
